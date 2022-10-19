@@ -1,36 +1,23 @@
 .data
-    prompt: .asciiz "Enter the number: "
-    message: .asciiz "\nSum of multiples of 3 is "
-    newLine: .asciiz "\n"
+    message: .asciiz "Sum of multiples of 3 is "
 
 .text 
-
 main:
-
-    #prompt ask the user to enter the numbers
-    li $v0, 4
-    la $a0, prompt
-    syscall
-
-    #get the number
-    li $v0, 5
-    syscall
-
     #initialization
-    move $s0, $v0
-    addi $t0, $zero, 0
-    addi $t1, $zero, 3
-    addi $t2, $zero, 1
-    addi $t3, $s0, 1
-
+ #   addi $s0, $zero, 12
+    addi $t0, $zero, 0  #t0 is the sum of multiple of 3
+    addi $t1, $zero, 3  #$t1 is 3
+    addi $t2, $zero, 1  #$t2 is 1
+    addi $t3, $s0, 1    #$t3 = $s1 + 1
+    
     #loop start
 loop:
-    div $t2, $t1
-    mfhi $t4
-    bne $t4, $zero, more
-    add $t0, $t0, $t2
-more:
-    addi $t2, $t2, 1
+    div $t2, $t1    
+    mfhi $t4            #take the remainder
+    bne $t4, $zero, more   #check $t4 
+    add $t0, $t0, $t2   #sum += i;
+more:                   #$t2 is not the multiple of 3
+    addi $t2, $t2, 1    #i++
     beq $t2, $t3, exit
     j loop
 exit:
@@ -43,8 +30,5 @@ exit:
     move $a0, $t0
     syscall
 
-    li $v0, 4
-    la $a0, newLine
-    syscall
     jr $ra
 .end
